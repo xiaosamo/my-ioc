@@ -3,6 +3,8 @@ package com.yuanshijia.bean;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @author yuanshijia
  * @date 2019-08-09
