@@ -7,7 +7,7 @@ package com.yuanshijia.bean;
  */
 public interface BeanFactory {
     /**
-     * 根据类名获取bean
+     * 根据name获取bean
      * @param name
      * @return
      * @throws Exception

@@ -15,13 +15,21 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BeanFactoryImpl implements BeanFactory {
 
+    /**
+     * 缓存bean对象的Map集合
+     * key -> Service注解声明的value
+     * val -> bean对象
+     */
     private static final Map<String, Object> beanMap = new ConcurrentHashMap<>();
 
 
+    /**
+     * 缓存bean注册信息的Map集合
+     * key -> Service注解声明的value
+     * val -> BeanDefinition
+     */
     private static final Map<String, BeanDefinition> beanDefineMap = new ConcurrentHashMap<>();
 
-
-    private static final Set<String> beanNameSet = Collections.synchronizedSet(new HashSet<>());
 
     /**
      * 1.当调用 getBean() 的方法的时候。会先到 beanMap 里面查找，有没有实例化好的对象。
@@ -73,7 +81,6 @@ public class BeanFactoryImpl implements BeanFactory {
 
     protected void registerBean(String name, BeanDefinition beanDefinition) {
         beanDefineMap.put(name, beanDefinition);
-        beanNameSet.add(name);
     }
 
     /**
@@ -86,15 +93,19 @@ public class BeanFactoryImpl implements BeanFactory {
         if (fields.length > 0) {
             for (Field field : fields) {
                 String className = field.getType().getName();
-                if (beanNameSet.contains(className)) {
-                    Object fieldBean = getBean(className);
-                    if (fieldBean != null) {
-                        ReflectionUtil.injectField(field, bean, fieldBean);
+                // 在bean的注册表中找对应的类
+                for (Map.Entry<String, BeanDefinition> entry : beanDefineMap.entrySet()) {
+                    if (entry.getValue().getClassName().equals(className)) {
+                        // 如果找到，获取到对象的实例，并通过反射设置到属性中
+                        String name = entry.getKey();
+                        Object fieldBean = getBean(name);
+                        if (fieldBean != null) {
+                            ReflectionUtil.injectField(field, bean, fieldBean);
+                        }
+                        break;
                     }
                 }
             }
         }
-
     }
-
 }

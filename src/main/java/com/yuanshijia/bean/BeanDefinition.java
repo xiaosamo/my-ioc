@@ -24,6 +24,9 @@ public class BeanDefinition {
      */
     private String className;
 
+    /**
+     * 如果是接口，接口的名称
+     */
     private String interfaceName;
 
     /**
@@ -36,6 +39,5 @@ public class BeanDefinition {
      */
     private List<PropertyArg> propertyArgs;
 
-    
     
 }
