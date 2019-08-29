@@ -25,7 +25,6 @@ public @interface Service {
 2.定义一个 Bean配置信息类BeanDefinition，里面声明了bean的名称，类名，参数，参数类型等。
 ```java
 @Data
-@ToString
 public class BeanDefinition {
 
     /**
